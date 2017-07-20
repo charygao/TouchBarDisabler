@@ -267,7 +267,6 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
 - (void) hotkeyWithEvent:(NSEvent *)hkEvent {
 	[self addOutput:[NSString stringWithFormat:@"Firing -[%@ %@]", NSStringFromClass([self class]), NSStringFromSelector(_cmd)]];
 	[self addOutput:[NSString stringWithFormat:@"Hotkey event: %@", hkEvent]];
-    float curr = [self get_brightness];
 //    NSLog(@"%f", [self get_brightness]);
     short keyCode = hkEvent.keyCode;
     switch (keyCode) {
@@ -320,39 +319,70 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
 	[self addOutput:[NSString stringWithFormat:@"Object: %@", anObject]];
 }
 
-- (void)decreaseVolume {
-    [self simulateHardWareKeyPressWithcGKeyCode:0x49];
+static io_connect_t get_event_driver(void)
+{
+    static  mach_port_t sEventDrvrRef = 0;
+    mach_port_t masterPort, service, iter;
+    kern_return_t    kr;
     
-//    AudioDeviceID deviceID = GetDefaultAudioDevice();
-//    if (GetMute(deviceID) == YES) {
-//        SetMute(deviceID, NO);
-//    } else {
-//        Float32 currentVolume = getCurrentVolume(deviceID);
-//        Float32 targetVolume = currentVolume - 0.1;
-//        
-////        NSLog(@"currentVolume is: %f", currentVolume);
-//        setVolume(deviceID, targetVolume);
-//    }
+    if (!sEventDrvrRef)
+    {
+        // Get master device port
+        kr = IOMasterPort( bootstrap_port, &masterPort );
+        //        check( KERN_SUCCESS == kr);
+        
+        kr = IOServiceGetMatchingServices( masterPort, IOServiceMatching( kIOHIDSystemClass ), &iter );
+        //        check( KERN_SUCCESS == kr);
+        
+        service = IOIteratorNext( iter );
+        //        check( service );
+        
+        kr = IOServiceOpen( service, mach_task_self(),
+                           kIOHIDParamConnectType, &sEventDrvrRef );
+        //        check( KERN_SUCCESS == kr );
+        
+        IOObjectRelease( service );
+        IOObjectRelease( iter );
+    }
+    return sEventDrvrRef;
+}
+
+
+static void HIDPostAuxKey( const UInt8 auxKeyCode )
+{
+    NXEventData   event;
+    kern_return_t kr;
+    IOGPoint      loc = { 0, 0 };
+    
+    // Key press event
+    UInt32      evtInfo = auxKeyCode << 16 | NX_KEYDOWN << 8;
+    bzero(&event, sizeof(NXEventData));
+    event.compound.subType = NX_SUBTYPE_AUX_CONTROL_BUTTONS;
+    event.compound.misc.L[0] = evtInfo;
+    kr = IOHIDPostEvent( get_event_driver(), NX_SYSDEFINED, loc, &event, kNXEventDataVersion, 0, FALSE );
+    //    check( KERN_SUCCESS == kr );
+    
+    // Key release event
+    evtInfo = auxKeyCode << 16 | NX_KEYUP << 8;
+    bzero(&event, sizeof(NXEventData));
+    event.compound.subType = NX_SUBTYPE_AUX_CONTROL_BUTTONS;
+    event.compound.misc.L[0] = evtInfo;
+    kr = IOHIDPostEvent( get_event_driver(), NX_SYSDEFINED, loc, &event, kNXEventDataVersion, 0, FALSE );
+    //    check( KERN_SUCCESS == kr );
+    
+}
+
+- (void)decreaseVolume {
+    HIDPostAuxKey(NX_KEYTYPE_SOUND_DOWN);
 }
 
 
 - (void)increaseVolume {
-    [self simulateHardWareKeyPressWithcGKeyCode:0x48];
-
-//    AudioDeviceID deviceID = GetDefaultAudioDevice();
-//    if (GetMute(deviceID) == YES) {
-//        SetMute(deviceID, NO);
-//    } else {
-//        Float32 currentVolume = getCurrentVolume(deviceID);
-//        Float32 targetVolume = currentVolume + 0.1;
-//        NSLog(@"currentVolume is: %f", currentVolume);
-//        setVolume(deviceID, targetVolume);
-//    }
+    HIDPostAuxKey(NX_KEYTYPE_SOUND_UP);
 }
 
 - (void)muteVolume {
-    AudioDeviceID deviceID = GetDefaultAudioDevice();
-    SetMute(deviceID, 1);
+    HIDPostAuxKey(NX_KEYTYPE_MUTE);
 }
 
 - (void)simulateHardWareKeyPressWithKeyCode: (int)keyCode {
@@ -374,209 +404,6 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
         CFRelease(sourceRef);
     }];
 
-}
-
-
-- (void)simulateHardWareKeyPressWithcGKeyCode: (CGKeyCode)cGkeyCode {
-    CGEventSourceRef sourceRef = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
-    
-//    CGEventRef modifierUnpress = CGEventCreateKeyboardEvent (sourceRef, (CGKeyCode)59, false);
-//    CGEventPost(kCGHIDEventTap, modifierUnpress);
-    
-    CGEventRef keyPress = CGEventCreateKeyboardEvent (sourceRef, cGkeyCode, true);
-    CGEventRef keyUnpress = CGEventCreateKeyboardEvent (sourceRef, cGkeyCode, false);
-    
-    CGEventPost(kCGHIDEventTap, keyPress);
-    CGEventPost(kCGHIDEventTap, keyUnpress);
-    
-//    CFRelease(modifierUnpress);
-    CFRelease(keyPress);
-    CFRelease(keyUnpress);
-    CFRelease(sourceRef);
-}
-
-
-void setVolume(AudioDeviceID device, Float32 volume) {
-    Float32 newVolume = volume;
-    
-    AudioObjectPropertyAddress addressLeft = {
-        kAudioDevicePropertyVolumeScalar,
-        kAudioDevicePropertyScopeOutput,
-        1 /*LEFT_CHANNEL*/
-    };
-    
-    OSStatus err;
-    err = AudioObjectSetPropertyData(device, &addressLeft, 0, NULL, sizeof(volume), &newVolume);
-    if (err) {
-        NSLog(@"something went wrong on the left side! %d", err);
-    }
-    
-    AudioObjectPropertyAddress addressRight = {
-        kAudioDevicePropertyVolumeScalar,
-        kAudioDevicePropertyScopeOutput,
-        2 /*RIGHT_CHANNEL*/
-    };
-    err = AudioObjectSetPropertyData(device, &addressRight, 0, NULL, sizeof(volume), &newVolume);
-    if (err) {
-        NSLog(@"something went wrong on the right side! %d", err);
-    }
-}
-
-
-void SetMute(AudioDeviceID device, UInt32 mute) {
-    UInt32 muteVal = (UInt32)mute;
-    
-    AudioObjectPropertyAddress address = {
-        kAudioDevicePropertyMute,
-        kAudioDevicePropertyScopeOutput,
-        0
-    };
-    
-    OSStatus err;
-    err = AudioObjectSetPropertyData(device, &address, 0, NULL, sizeof(UInt32), &muteVal);
-    if (err)
-    {
-        NSString * message;
-        NSLog(@"error while %@muting: %@", (mute ? @"" : @"un"), message);
-    }
-}
-
-AudioDeviceID GetDefaultAudioDevice()
-{
-    OSStatus err;
-    AudioDeviceID device = 0;
-    UInt32 size = sizeof(AudioDeviceID);
-    AudioObjectPropertyAddress address = {
-        kAudioHardwarePropertyDefaultOutputDevice,
-        kAudioObjectPropertyScopeGlobal,
-        kAudioObjectPropertyElementMaster
-    };
-    
-    err = AudioObjectGetPropertyData(kAudioObjectSystemObject, &address, 0, NULL, &size, &device);
-    if (err)
-    {
-        NSLog(@"could not get default audio output device");
-    }
-    
-    return device;
-}
-
-Float32 getCurrentVolume(AudioDeviceID device)
-{
-    AudioObjectPropertyAddress propertyAddress = {
-        kAudioHardwareServiceDeviceProperty_VirtualMasterVolume,
-        kAudioDevicePropertyScopeOutput,
-        kAudioObjectPropertyElementMaster
-    };
-    
-    if(!AudioHardwareServiceHasProperty(device, &propertyAddress)) {
-        // An error occurred
-    }
-    Float32 volume;
-    UInt32 dataSize = sizeof(volume);
-    OSStatus result = AudioHardwareServiceGetPropertyData(device, &propertyAddress, 0, NULL, &dataSize, &volume);
-    
-    if(kAudioHardwareNoError != result) {
-        
-    }
-    return volume;
-}
-
-BOOL GetMute(AudioDeviceID device)
-{
-    UInt32 size = sizeof(UInt32);
-    UInt32 muteVal;
-    
-    AudioObjectPropertyAddress address = {
-        kAudioDevicePropertyMute,
-        kAudioDevicePropertyScopeOutput,
-        0
-    };
-    
-    OSStatus err;
-    err = AudioObjectGetPropertyData(device, &address, 0, NULL, &size, &muteVal);
-    if (err)
-    {
-        NSString * message;
-        /* big switch to set message */
-        NSLog(@"error while getting mute status: %@", message);
-    }
-    
-    return (BOOL)muteVal;
-}
-
-
-- (float) get_brightness {
-    CGDirectDisplayID display[kMaxDisplays];
-    CGDisplayCount numDisplays;
-    CGDisplayErr err;
-    err = CGGetActiveDisplayList(kMaxDisplays, display, &numDisplays);
-    
-    if (err != CGDisplayNoErr)
-        printf("cannot get list of displays (error %d)\n",err);
-    for (CGDisplayCount i = 0; i < numDisplays; ++i) {
-        
-        
-        CGDirectDisplayID dspy = display[i];
-        CFDictionaryRef originalMode = CGDisplayCurrentMode(dspy);
-        if (originalMode == NULL)
-            continue;
-        io_service_t service = CGDisplayIOServicePort(dspy);
-        
-        float brightness;
-
-        err = IODisplayGetFloatParameter(service, kNilOptions, kDisplayBrightness, &brightness);
-        if (err != kIOReturnSuccess) {
-            fprintf(stderr,
-                    "failed to get brightness of display 0x%x (error %d)",
-                    (unsigned int)dspy, err);
-            continue;
-        }
-        return brightness;
-    }
-    return -1.0;//couldn't get brightness for any display
-}
-
-- (void) set_brightness:(float) new_brightness {
-    CGDirectDisplayID display[kMaxDisplays];
-    CGDisplayCount numDisplays;
-    CGDisplayErr err;
-    err = CGGetActiveDisplayList(kMaxDisplays, display, &numDisplays);
-    
-    if (err != CGDisplayNoErr)
-        printf("cannot get list of displays (error %d)\n",err);
-    for (CGDisplayCount i = 0; i < numDisplays; ++i) {
-        
-        
-        CGDirectDisplayID dspy = display[i];
-        CFDictionaryRef originalMode = CGDisplayCurrentMode(dspy);
-        if (originalMode == NULL)
-            continue;
-        io_service_t service = CGDisplayIOServicePort(dspy);
-        
-        float brightness;
-        err= IODisplayGetFloatParameter(service, kNilOptions, kDisplayBrightness,
-                                        &brightness);
-        if (err != kIOReturnSuccess) {
-            fprintf(stderr,
-                    "failed to get brightness of display 0x%x (error %d)",
-                    (unsigned int)dspy, err);
-            continue;
-        }
-        
-        err = IODisplaySetFloatParameter(service, kNilOptions, kDisplayBrightness,
-                                         new_brightness);
-        if (err != kIOReturnSuccess) {
-            fprintf(stderr,
-                    "Failed to set brightness of display 0x%x (error %d)",
-                    (unsigned int)dspy, err);
-            continue;
-        }
-        
-        if(brightness > 0.0){
-        } else {
-        }
-    }
 }
 
 - (void) registerHotkeys {
