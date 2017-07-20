@@ -183,7 +183,7 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
         [self alertForIncompatibility];
     }
     
-    if (osV.minorVersion == 12 && osV.patchVersion == 5) {
+    if (osV.minorVersion == 12 && osV.patchVersion == 1) {
         NSDictionary *systemVersionDictionary = [NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"];
         NSString *systemVersion = [systemVersionDictionary objectForKey:@"ProductVersion"];
         if (![systemVersion isEqualToString:@"16B2657"]) {
@@ -199,7 +199,7 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     NSAlert *alert = [[NSAlert alloc] init];
     [alert addButtonWithTitle:@"OK"];
     [alert setMessageText:@"You can't use this version of the application \"TouchBarDisabler\" with this version of macOS."];
-    [alert setInformativeText:[NSString stringWithFormat:@"You have macOS %@. The application requires macOS 10.12.1 (16B2657) or 10.12.2 or later.", verString]];
+    [alert setInformativeText:[NSString stringWithFormat:@"You have macOS %@. The application requires macOS 10.12.1 (Build 16B2657) or 10.12.2 or later.", verString]];
     [alert setAlertStyle:NSAlertStyleWarning];
     [alert runModal];
     [NSApp terminate:self];
