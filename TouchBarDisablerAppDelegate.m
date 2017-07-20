@@ -148,6 +148,12 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     
     [menu addItem:quit];
     _statusItem.menu = menu;
+    
+    if (!SMLoginItemSetEnabled((__bridge CFStringRef)@"com.dim.TouchBarDisabler-Helper", YES)) {
+        NSLog(@"Login Item Was Not Successful");
+    } else {
+        NSLog(@"Login Item Added!");
+    }
 }
 
 

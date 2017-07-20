@@ -23,10 +23,29 @@
 		568DD8221F2055C200AFA965 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 568DD8211F2055C200AFA965 /* ServiceManagement.framework */; };
 		56A2326F1EA9A46100B0F798 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56A2326E1EA9A46100B0F798 /* IOKit.framework */; };
 		56A232711EA9A46900B0F798 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56A232701EA9A46900B0F798 /* ApplicationServices.framework */; };
+		56B06FE01F206C3E006CCB31 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B06FDF1F206C3E006CCB31 /* AppDelegate.m */; };
+		56B06FE31F206C3E006CCB31 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B06FE21F206C3E006CCB31 /* main.m */; };
+		56B06FE61F206C3E006CCB31 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B06FE51F206C3E006CCB31 /* ViewController.m */; };
+		56B06FE81F206C3E006CCB31 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56B06FE71F206C3E006CCB31 /* Assets.xcassets */; };
+		56B06FEB1F206C3E006CCB31 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56B06FE91F206C3E006CCB31 /* Main.storyboard */; };
+		56B06FF11F206C8E006CCB31 /* TouchBarDisabler Helper.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 56B06FDC1F206C3E006CCB31 /* TouchBarDisabler Helper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		56B8628A1EADADD400F01ED8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 56B8628C1EADADD400F01ED8 /* Localizable.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		56B06FF01F206C7D006CCB31 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LoginItems;
+			dstSubfolderSpec = 1;
+			files = (
+				56B06FF11F206C8E006CCB31 /* TouchBarDisabler Helper.app in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -57,6 +76,15 @@
 		568DD8211F2055C200AFA965 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		56A2326E1EA9A46100B0F798 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		56A232701EA9A46900B0F798 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		56B06FDC1F206C3E006CCB31 /* TouchBarDisabler Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TouchBarDisabler Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		56B06FDE1F206C3E006CCB31 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		56B06FDF1F206C3E006CCB31 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		56B06FE21F206C3E006CCB31 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		56B06FE41F206C3E006CCB31 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		56B06FE51F206C3E006CCB31 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		56B06FE71F206C3E006CCB31 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		56B06FEA1F206C3E006CCB31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		56B06FEC1F206C3E006CCB31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		56B8628B1EADADD400F01ED8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		56B8628F1EADAEE300F01ED8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* TouchBarDisabler-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TouchBarDisabler-Info.plist"; sourceTree = "<group>"; };
@@ -64,6 +92,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		56B06FD91F206C3E006CCB31 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D11072E0486CEB800E47090 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -116,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				8D1107320486CEB800E47090 /* TouchBarDisabler.app */,
+				56B06FDC1F206C3E006CCB31 /* TouchBarDisabler Helper.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -128,6 +164,7 @@
 				563EB6641EADB62C00858299 /* MainMenu.xib */,
 				563EB6661EADB66E00858299 /* tb_disabled.png */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
+				56B06FDD1F206C3E006CCB31 /* TouchBarDisabler Helper */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -183,9 +220,49 @@
 			path = DDHotKey;
 			sourceTree = "<group>";
 		};
+		56B06FDD1F206C3E006CCB31 /* TouchBarDisabler Helper */ = {
+			isa = PBXGroup;
+			children = (
+				56B06FDE1F206C3E006CCB31 /* AppDelegate.h */,
+				56B06FDF1F206C3E006CCB31 /* AppDelegate.m */,
+				56B06FE41F206C3E006CCB31 /* ViewController.h */,
+				56B06FE51F206C3E006CCB31 /* ViewController.m */,
+				56B06FE71F206C3E006CCB31 /* Assets.xcassets */,
+				56B06FE91F206C3E006CCB31 /* Main.storyboard */,
+				56B06FEC1F206C3E006CCB31 /* Info.plist */,
+				56B06FE11F206C3E006CCB31 /* Supporting Files */,
+			);
+			path = "TouchBarDisabler Helper";
+			sourceTree = "<group>";
+		};
+		56B06FE11F206C3E006CCB31 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				56B06FE21F206C3E006CCB31 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		56B06FDB1F206C3E006CCB31 /* TouchBarDisabler Helper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56B06FEF1F206C3E006CCB31 /* Build configuration list for PBXNativeTarget "TouchBarDisabler Helper" */;
+			buildPhases = (
+				56B06FD81F206C3E006CCB31 /* Sources */,
+				56B06FD91F206C3E006CCB31 /* Frameworks */,
+				56B06FDA1F206C3E006CCB31 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TouchBarDisabler Helper";
+			productName = "TouchBarDisabler Helper";
+			productReference = 56B06FDC1F206C3E006CCB31 /* TouchBarDisabler Helper.app */;
+			productType = "com.apple.product-type.application";
+		};
 		8D1107260486CEB800E47090 /* TouchBarDisabler */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "TouchBarDisabler" */;
@@ -193,6 +270,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				56B06FF01F206C7D006CCB31 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -212,6 +290,11 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 				TargetAttributes = {
+					56B06FDB1F206C3E006CCB31 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = 54362BT7G2;
+						ProvisioningStyle = Automatic;
+					};
 					8D1107260486CEB800E47090 = {
 						DevelopmentTeam = 54362BT7G2;
 						ProvisioningStyle = Automatic;
@@ -230,17 +313,28 @@
 				"zh-Hans",
 				"zh-Hant",
 				ja,
+				Base,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* DDHotKey */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* TouchBarDisabler */,
+				56B06FDB1F206C3E006CCB31 /* TouchBarDisabler Helper */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		56B06FDA1F206C3E006CCB31 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56B06FE81F206C3E006CCB31 /* Assets.xcassets in Resources */,
+				56B06FEB1F206C3E006CCB31 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D1107290486CEB800E47090 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -256,6 +350,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		56B06FD81F206C3E006CCB31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56B06FE61F206C3E006CCB31 /* ViewController.m in Sources */,
+				56B06FE31F206C3E006CCB31 /* main.m in Sources */,
+				56B06FE01F206C3E006CCB31 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D11072C0486CEB800E47090 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -271,6 +375,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		56B06FE91F206C3E006CCB31 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				56B06FEA1F206C3E006CCB31 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		56B8628C1EADADD400F01ED8 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -285,6 +397,85 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		56B06FED1F206C3E006CCB31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 54362BT7G2;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "TouchBarDisabler Helper/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dim.TouchBarDisabler-Helper";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		56B06FEE1F206C3E006CCB31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 54362BT7G2;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "TouchBarDisabler Helper/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dim.TouchBarDisabler-Helper";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -339,6 +530,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -350,6 +542,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
@@ -363,6 +556,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -372,12 +566,21 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				SDKROOT = macosx;
+				SKIP_INSTALL = NO;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		56B06FEF1F206C3E006CCB31 /* Build configuration list for PBXNativeTarget "TouchBarDisabler Helper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56B06FED1F206C3E006CCB31 /* Debug */,
+				56B06FEE1F206C3E006CCB31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "TouchBarDisabler" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
