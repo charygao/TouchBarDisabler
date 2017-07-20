@@ -72,7 +72,6 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
 
 - (void)windowWillClose:(NSNotification *)notification {
     if (notification.object == noSIPWindow) {
-        NSLog(@"%@ window will close", notification.object);
         player = nil;
         [NSApp performSelector:@selector(terminate:) withObject:nil afterDelay:0.0];
     }

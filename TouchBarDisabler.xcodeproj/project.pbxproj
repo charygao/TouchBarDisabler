@@ -580,6 +580,7 @@
 				56B06FEE1F206C3E006CCB31 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "TouchBarDisabler" */ = {
 			isa = XCConfigurationList;
