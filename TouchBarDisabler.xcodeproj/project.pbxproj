@@ -20,10 +20,10 @@
 		563EB6651EADB62C00858299 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 563EB6641EADB62C00858299 /* MainMenu.xib */; };
 		563EB6671EADB66E00858299 /* tb_disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 563EB6661EADB66E00858299 /* tb_disabled.png */; };
 		56804CB71EAD9DA6008D76AB /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56804CB61EAD9DA6008D76AB /* Icon.icns */; };
+		568DD8221F2055C200AFA965 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 568DD8211F2055C200AFA965 /* ServiceManagement.framework */; };
 		56A2326F1EA9A46100B0F798 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56A2326E1EA9A46100B0F798 /* IOKit.framework */; };
 		56A232711EA9A46900B0F798 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56A232701EA9A46900B0F798 /* ApplicationServices.framework */; };
 		56B8628A1EADADD400F01ED8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 56B8628C1EADADD400F01ED8 /* Localizable.strings */; };
-		56BF3DCB1EAA8F5700B05ABE /* LaunchAtLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF3DC91EAA8F5700B05ABE /* LaunchAtLoginController.m */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -54,12 +54,11 @@
 		563EB6681EADB7D100858299 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		563EB6691EADB80900858299 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		56804CB61EAD9DA6008D76AB /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
+		568DD8211F2055C200AFA965 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		56A2326E1EA9A46100B0F798 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		56A232701EA9A46900B0F798 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		56B8628B1EADADD400F01ED8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		56B8628F1EADAEE300F01ED8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		56BF3DC91EAA8F5700B05ABE /* LaunchAtLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LaunchAtLoginController.m; path = LaunchAtLoginController/LaunchAtLoginController.m; sourceTree = "<group>"; };
-		56BF3DCA1EAA8F5700B05ABE /* LaunchAtLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LaunchAtLoginController.h; path = LaunchAtLoginController/LaunchAtLoginController.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* TouchBarDisabler-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TouchBarDisabler-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* TouchBarDisabler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TouchBarDisabler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -69,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				568DD8221F2055C200AFA965 /* ServiceManagement.framework in Frameworks */,
 				560000A51EB11FA70009DA59 /* AVKit.framework in Frameworks */,
 				560000A31EB11FA10009DA59 /* AVFoundation.framework in Frameworks */,
 				56105AFE1EA9AF3100FF1F59 /* AudioToolbox.framework in Frameworks */,
@@ -86,7 +86,6 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				56BF3DCC1EAA911A00B05ABE /* LaunchAtLoginController */,
 				55CD8D55181C2F9E003799D0 /* DDHotKey */,
 				256AC3D80F4B6AC300CF3369 /* TouchBarDisablerAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* TouchBarDisablerAppDelegate.m */,
@@ -158,6 +157,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				568DD8211F2055C200AFA965 /* ServiceManagement.framework */,
 				560000A41EB11FA70009DA59 /* AVKit.framework */,
 				560000A21EB11FA10009DA59 /* AVFoundation.framework */,
 				56105AFD1EA9AF3100FF1F59 /* AudioToolbox.framework */,
@@ -181,15 +181,6 @@
 				55CD8D51181C222C003799D0 /* DDHotKeyUtilities.m */,
 			);
 			path = DDHotKey;
-			sourceTree = "<group>";
-		};
-		56BF3DCC1EAA911A00B05ABE /* LaunchAtLoginController */ = {
-			isa = PBXGroup;
-			children = (
-				56BF3DC91EAA8F5700B05ABE /* LaunchAtLoginController.m */,
-				56BF3DCA1EAA8F5700B05ABE /* LaunchAtLoginController.h */,
-			);
-			name = LaunchAtLoginController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -272,7 +263,6 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				55CD8D52181C222C003799D0 /* DDHotKeyCenter.m in Sources */,
 				55CD8D54181C222C003799D0 /* DDHotKeyUtilities.m in Sources */,
-				56BF3DCB1EAA8F5700B05ABE /* LaunchAtLoginController.m in Sources */,
 				256AC3DA0F4B6AC300CF3369 /* TouchBarDisablerAppDelegate.m in Sources */,
 				55CD8D53181C222C003799D0 /* DDHotKeyTextField.m in Sources */,
 			);
@@ -311,7 +301,7 @@
 				GCC_PREFIX_HEADER = TouchBarDisabler_Prefix.pch;
 				INFOPLIST_FILE = "TouchBarDisabler-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dim.touchBarDisabler;
 				PRODUCT_NAME = TouchBarDisabler;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -332,7 +322,7 @@
 				GCC_PREFIX_HEADER = TouchBarDisabler_Prefix.pch;
 				INFOPLIST_FILE = "TouchBarDisabler-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dim.touchBarDisabler;
 				PRODUCT_NAME = TouchBarDisabler;
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -8,9 +8,10 @@
 #include <CoreFoundation/CoreFoundation.h>
 #import <CoreAudio/CoreAudio.h>
 #import <AudioToolbox/AudioServices.h>
-#import "LaunchAtLoginController.h"
 #import <AVKit/AVKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import <ServiceManagement/ServiceManagement.h>
+
 @import CoreMedia;
 
 const int kMaxDisplays = 16;
@@ -166,13 +167,42 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     [menu addItem:quit];
     _statusItem.menu = menu;
     
-    LaunchAtLoginController *launchController = [[LaunchAtLoginController alloc] init];
-    [launchController setLaunchAtLogin:YES];
+//    if (!SMLoginItemSetEnabled((__bridge CFStringRef)@"com.dim.touchBarDisabler", YES)) {
+//        NSLog(@"Login Item Was Not Successful");
+//    }
+//
+//    LaunchAtLoginController *launchController = [[LaunchAtLoginController alloc] init];
+//    [launchController setLaunchAtLogin:YES];
 }
 
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    NSOperatingSystemVersion osV = [NSProcessInfo processInfo].operatingSystemVersion;
+//    NSLog(@"major %d, minor %d, patch %d", osV.majorVersion, osV.minorVersion, osV.patchVersion);
+    if (osV.minorVersion < 12 || (osV.minorVersion == 12 && osV.patchVersion < 1)) {
+        [self alertForIncompatibility];
+    }
+    
+    if (osV.minorVersion == 12 && osV.patchVersion == 5) {
+        NSDictionary *systemVersionDictionary = [NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"];
+        NSString *systemVersion = [systemVersionDictionary objectForKey:@"ProductVersion"];
+        if (![systemVersion isEqualToString:@"16B2657"]) {
+            [self alertForIncompatibility];
+        }
+    }
+    
     [self detectSIP];
+}
+
+- (void)alertForIncompatibility {
+    NSString *verString = [NSProcessInfo processInfo].operatingSystemVersionString;
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert addButtonWithTitle:@"OK"];
+    [alert setMessageText:@"You can't use this version of the application \"TouchBarDisabler\" with this version of macOS."];
+    [alert setInformativeText:[NSString stringWithFormat:@"You have macOS %@. The application requires macOS 10.12.1 (16B2657) or 10.12.2 or later.", verString]];
+    [alert setAlertStyle:NSAlertStyleWarning];
+    [alert runModal];
+    [NSApp terminate:self];
 }
 
 - (void)displayHUD:(id)sender {
