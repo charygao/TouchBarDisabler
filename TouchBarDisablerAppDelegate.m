@@ -272,10 +272,10 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     short keyCode = hkEvent.keyCode;
     switch (keyCode) {
         case kVK_ANSI_1:
-            [self set_brightness:curr - 0.1];
+            [self simulateHardWareKeyPressWithKeyCode:107];
             break;
         case kVK_ANSI_2:
-            [self set_brightness:curr + 0.1];
+            [self simulateHardWareKeyPressWithKeyCode:113];
             break;
         case kVK_ANSI_3:
             [self toggleExpose];
@@ -321,35 +321,80 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
 }
 
 - (void)decreaseVolume {
-    AudioDeviceID deviceID = GetDefaultAudioDevice();
-    if (GetMute(deviceID) == YES) {
-        SetMute(deviceID, NO);
-    } else {
-        Float32 currentVolume = getCurrentVolume(deviceID);
-        Float32 targetVolume = currentVolume - 0.1;
-        
-//        NSLog(@"currentVolume is: %f", currentVolume);
-        setVolume(deviceID, targetVolume);
-    }
+    [self simulateHardWareKeyPressWithcGKeyCode:0x49];
+    
+//    AudioDeviceID deviceID = GetDefaultAudioDevice();
+//    if (GetMute(deviceID) == YES) {
+//        SetMute(deviceID, NO);
+//    } else {
+//        Float32 currentVolume = getCurrentVolume(deviceID);
+//        Float32 targetVolume = currentVolume - 0.1;
+//        
+////        NSLog(@"currentVolume is: %f", currentVolume);
+//        setVolume(deviceID, targetVolume);
+//    }
 }
 
 
 - (void)increaseVolume {
-    AudioDeviceID deviceID = GetDefaultAudioDevice();
-    if (GetMute(deviceID) == YES) {
-        SetMute(deviceID, NO);
-    } else {
-        Float32 currentVolume = getCurrentVolume(deviceID);
-        Float32 targetVolume = currentVolume + 0.1;
-        NSLog(@"currentVolume is: %f", currentVolume);
-        setVolume(deviceID, targetVolume);
-    }
+    [self simulateHardWareKeyPressWithcGKeyCode:0x48];
+
+//    AudioDeviceID deviceID = GetDefaultAudioDevice();
+//    if (GetMute(deviceID) == YES) {
+//        SetMute(deviceID, NO);
+//    } else {
+//        Float32 currentVolume = getCurrentVolume(deviceID);
+//        Float32 targetVolume = currentVolume + 0.1;
+//        NSLog(@"currentVolume is: %f", currentVolume);
+//        setVolume(deviceID, targetVolume);
+//    }
 }
 
 - (void)muteVolume {
     AudioDeviceID deviceID = GetDefaultAudioDevice();
     SetMute(deviceID, 1);
 }
+
+- (void)simulateHardWareKeyPressWithKeyCode: (int)keyCode {
+    CGEventSourceRef sourceRef = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
+    
+    CGEventRef modifierUnpress = CGEventCreateKeyboardEvent (sourceRef, (CGKeyCode)0x3B, false);
+    CGEventPost(kCGHIDEventTap, modifierUnpress);
+    CFRelease(modifierUnpress);
+
+    [NSTimer scheduledTimerWithTimeInterval:0.05f repeats:NO block:^(NSTimer * _Nonnull timer) {
+        CGEventRef keyPress = CGEventCreateKeyboardEvent (sourceRef, (CGKeyCode)keyCode, true);
+        CGEventRef keyUnpress = CGEventCreateKeyboardEvent (sourceRef, (CGKeyCode)keyCode, false);
+        
+        CGEventPost(kCGHIDEventTap, keyPress);
+        CGEventPost(kCGHIDEventTap, keyUnpress);
+        
+        CFRelease(keyPress);
+        CFRelease(keyUnpress);
+        CFRelease(sourceRef);
+    }];
+
+}
+
+
+- (void)simulateHardWareKeyPressWithcGKeyCode: (CGKeyCode)cGkeyCode {
+    CGEventSourceRef sourceRef = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
+    
+//    CGEventRef modifierUnpress = CGEventCreateKeyboardEvent (sourceRef, (CGKeyCode)59, false);
+//    CGEventPost(kCGHIDEventTap, modifierUnpress);
+    
+    CGEventRef keyPress = CGEventCreateKeyboardEvent (sourceRef, cGkeyCode, true);
+    CGEventRef keyUnpress = CGEventCreateKeyboardEvent (sourceRef, cGkeyCode, false);
+    
+    CGEventPost(kCGHIDEventTap, keyPress);
+    CGEventPost(kCGHIDEventTap, keyUnpress);
+    
+//    CFRelease(modifierUnpress);
+    CFRelease(keyPress);
+    CFRelease(keyUnpress);
+    CFRelease(sourceRef);
+}
+
 
 void setVolume(AudioDeviceID device, Float32 volume) {
     Float32 newVolume = volume;
