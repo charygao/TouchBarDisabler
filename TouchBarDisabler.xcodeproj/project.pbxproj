@@ -20,6 +20,7 @@
 		563EB6651EADB62C00858299 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 563EB6641EADB62C00858299 /* MainMenu.xib */; };
 		563EB6671EADB66E00858299 /* tb_disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 563EB6661EADB66E00858299 /* tb_disabled.png */; };
 		56771DDF1F5F238900027ED5 /* STPrivilegedTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 56771DDD1F5F238900027ED5 /* STPrivilegedTask.m */; };
+		56771E071F5F276900027ED5 /* helper in Resources */ = {isa = PBXBuildFile; fileRef = 56771E061F5F276900027ED5 /* helper */; };
 		56804CB71EAD9DA6008D76AB /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56804CB61EAD9DA6008D76AB /* Icon.icns */; };
 		568DD8221F2055C200AFA965 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 568DD8211F2055C200AFA965 /* ServiceManagement.framework */; };
 		56A2326F1EA9A46100B0F798 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56A2326E1EA9A46100B0F798 /* IOKit.framework */; };
@@ -75,6 +76,7 @@
 		563EB6691EADB80900858299 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		56771DDD1F5F238900027ED5 /* STPrivilegedTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STPrivilegedTask.m; sourceTree = "<group>"; };
 		56771DDE1F5F238900027ED5 /* STPrivilegedTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STPrivilegedTask.h; sourceTree = "<group>"; };
+		56771E061F5F276900027ED5 /* helper */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = helper; sourceTree = "<group>"; };
 		56804CB61EAD9DA6008D76AB /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
 		568DD8211F2055C200AFA965 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		56A2326E1EA9A46100B0F798 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -180,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				29B97316FDCFA39411CA2CEA /* main.m */,
+				56771E061F5F276900027ED5 /* helper */,
 				256AC3F00F4B6AF500CF3369 /* TouchBarDisabler_Prefix.pch */,
 				8D1107310486CEB800E47090 /* TouchBarDisabler-Info.plist */,
 			);
@@ -348,6 +351,7 @@
 				56B8628A1EADADD400F01ED8 /* Localizable.strings in Resources */,
 				56804CB71EAD9DA6008D76AB /* Icon.icns in Resources */,
 				563EB6651EADB62C00858299 /* MainMenu.xib in Resources */,
+				56771E071F5F276900027ED5 /* helper in Resources */,
 				563EB6671EADB66E00858299 /* tb_disabled.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
