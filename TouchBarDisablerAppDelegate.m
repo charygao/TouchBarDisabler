@@ -184,39 +184,51 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     [NSApp terminate:self];
 }
 
+
+
 - (void)displayHUD:(id)sender {
     [window setIsVisible:YES];
 }
 
 - (void)enableTouchBar {
-    NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:@"/bin/bash"];
-    [task setArguments:@[ @"-c", @"defaults delete com.apple.touchbar.agent PresentationModeGlobal;defaults write com.apple.touchbar.agent PresentationModeFnModes '<dict><key>app</key><string>fullControlStrip</string><key>appWithControlStrip</key><string>fullControlStrip</string><key>fullControlStrip</key><string>app</string></dict>';launchctl load /System/Library/LaunchAgents/com.apple.controlstrip.plist;launchctl load /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;launchctl unload /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;launchctl load /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;pkill \"Touch Bar agent\";killall Dock"]];
-    task.terminationHandler = ^(NSTask *task){
-        [menu removeItem:showHelp];
-    };
-    [task launch];
+    NSOperatingSystemVersion osV = [NSProcessInfo processInfo].operatingSystemVersion;
+    if (osV.minorVersion == 12) {
+        NSTask *task = [[NSTask alloc] init];
+        [task setLaunchPath:@"/bin/bash"];
+        [task setArguments:@[ @"-c", @"defaults delete com.apple.touchbar.agent PresentationModeGlobal;defaults write com.apple.touchbar.agent PresentationModeFnModes '<dict><key>app</key><string>fullControlStrip</string><key>appWithControlStrip</key><string>fullControlStrip</string><key>fullControlStrip</key><string>app</string></dict>';launchctl load /System/Library/LaunchAgents/com.apple.controlstrip.plist;launchctl load /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;launchctl unload /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;launchctl load /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;pkill \"Touch Bar agent\";killall Dock"]];
+        task.terminationHandler = ^(NSTask *task){
+            [menu removeItem:showHelp];
+        };
+        [task launch];
+    } else {
+        NSArray *args = [NSArray arrayWithObjects: @"-c", @"launchctl load /System/Library/LaunchDaemons/com.apple.touchbarserver.plist;killall Dock", nil];
+    }
     touchBarDisabled = NO;
     toggler.title = NSLocalizedString(@"DISABLE_TOUCH_BAR", nil);
     [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:@"touchBarDisabled"];
 }
 
 - (void)disableTouchBar {
-    NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:@"/bin/bash"];
-    [emptyWindow makeKeyAndOrderFront:self];
-    [NSApp activateIgnoringOtherApps:YES];
-    [task setArguments:@[ @"-c", @"defaults write com.apple.touchbar.agent PresentationModeGlobal -string fullControlStrip;launchctl unload /System/Library/LaunchAgents/com.apple.controlstrip.plist;killall ControlStrip;launchctl unload /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;launchctl unload /System/Library/LaunchDaemons/com.apple.touchbar.user-device.plist;pkill \"Touch Bar agent\""]];
-    task.terminationHandler = ^(NSTask *task){
-        [emptyWindow setIsVisible:NO];
-        [menu addItem:showHelp];
-    };
-    if (hasSeenHelperOnce) {
-        [emptyWindow setIsVisible:YES];
+    NSOperatingSystemVersion osV = [NSProcessInfo processInfo].operatingSystemVersion;
+    if (osV.minorVersion == 12) {
+        NSTask *task = [[NSTask alloc] init];
+        [task setLaunchPath:@"/bin/bash"];
+        [emptyWindow makeKeyAndOrderFront:self];
+        [NSApp activateIgnoringOtherApps:YES];
+        [task setArguments:@[ @"-c", @"defaults write com.apple.touchbar.agent PresentationModeGlobal -string fullControlStrip;launchctl unload /System/Library/LaunchAgents/com.apple.controlstrip.plist;killall ControlStrip;launchctl unload /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;launchctl unload /System/Library/LaunchDaemons/com.apple.touchbar.user-device.plist;pkill \"Touch Bar agent\""]];
+        task.terminationHandler = ^(NSTask *task){
+            [emptyWindow setIsVisible:NO];
+            [menu addItem:showHelp];
+        };
+        if (hasSeenHelperOnce) {
+            [emptyWindow setIsVisible:YES];
+        } else {
+            [window setIsVisible:YES];
+        }
+        [task launch];
     } else {
-        [window setIsVisible:YES];
+        NSArray *args = [NSArray arrayWithObjects: @"-c", @"killall TouchBarServer;launchctl unload /System/Library/LaunchDaemons/com.apple.touchbarserver.plist", nil];
     }
-    [task launch];
     touchBarDisabled = YES;
     NSString *enable = NSLocalizedString(@"ENABLE_TOUCH_BAR", nil);
     toggler.title = enable;
