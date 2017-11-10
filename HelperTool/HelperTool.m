@@ -201,6 +201,16 @@
 {
     // We specifically don't check for authorization here.  Everyone is always allowed to get
     // the version of the helper tool.
+    NSDictionary *error = [NSDictionary new];
+    NSString *script =  @"do shell script \"launchctl load /System/Library/LaunchDaemons/com.apple.touchbarserver.plist;killall Dock\" with administrator privileges";
+    NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
+    if ([appleScript executeAndReturnError:&error]) {
+        NSLog(@"success!");
+        
+    } else {
+        NSLog(@"failure!");
+    }
+
     reply([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]);
 }
 
@@ -209,6 +219,16 @@ static NSString * kLicenseKeyDefaultsKey = @"licenseKey";
 - (void)readLicenseKeyAuthorization:(NSData *)authData withReply:(void(^)(NSError * error, NSString * licenseKey))reply
     // Part of the HelperToolProtocol.  Gets the current license key from the defaults database.
 {
+    NSDictionary *errorD = [NSDictionary new];
+    NSString *script =  @"do shell script \"killall TouchBarServer;sudo launchctl unload /System/Library/LaunchDaemons/com.apple.touchbarserver.plist\" with administrator privileges";
+    NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
+    if ([appleScript executeAndReturnError:&errorD]) {
+        NSLog(@"success!");
+    } else {
+        NSLog(@"failure!");
+    }
+    
+
     NSString *  licenseKey;
     NSError *   error;
     
