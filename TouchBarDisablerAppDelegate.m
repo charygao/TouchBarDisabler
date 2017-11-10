@@ -140,14 +140,14 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     
     toggler = [[NSMenuItem alloc] initWithTitle:disable action:@selector(toggleTouchBar:) keyEquivalent:@""];
     showHelp = [[NSMenuItem alloc] initWithTitle:shortcut action:@selector(displayHUD:) keyEquivalent:@""];
-    installHelper = [[NSMenuItem alloc] initWithTitle:@"installHelper" action:@selector(installAction:) keyEquivalent:@""];
-    turnOn = [[NSMenuItem alloc] initWithTitle:@"turnOn" action:@selector(toggleOnHighSierra:) keyEquivalent:@""];
-    turnOff = [[NSMenuItem alloc] initWithTitle:@"turnOff" action:@selector(toggleOffHighSierra:) keyEquivalent:@""];
+//    installHelper = [[NSMenuItem alloc] initWithTitle:@"installHelper" action:@selector(installAction:) keyEquivalent:@""];
+//    turnOn = [[NSMenuItem alloc] initWithTitle:@"turnOn" action:@selector(toggleOnHighSierra:) keyEquivalent:@""];
+//    turnOff = [[NSMenuItem alloc] initWithTitle:@"turnOff" action:@selector(toggleOffHighSierra:) keyEquivalent:@""];
 
     [menu addItem:toggler];
-    [menu addItem:installHelper];
-    [menu addItem:turnOn];
-    [menu addItem:turnOff];
+//    [menu addItem:installHelper];
+//    [menu addItem:turnOn];
+//    [menu addItem:turnOff];
 
     NSNumber *num = [[NSUserDefaults standardUserDefaults] objectForKey:@"touchBarDisabled"];
     NSNumber *helper = [[NSUserDefaults standardUserDefaults] objectForKey:@"hasSeenHelperOnce"];
@@ -179,20 +179,10 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
 
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    // external begins here
+    // external authentication code begins here
     OSStatus                    err;
     AuthorizationExternalForm   extForm;
-    
     assert(self.window != nil);
-    
-    // Create our connection to the authorization system.
-    //
-    // If we can't create an authorization reference then the app is not going to be able
-    // to do anything requiring authorization.  Generally this only happens when you launch
-    // the app in some wacky, and typically unsupported, way.  In the debug build we flag that
-    // with an assert.  In the release build we continue with self->_authRef as NULL, which will
-    // cause all authorized operations to fail.
-    
     err = AuthorizationCreate(NULL, NULL, 0, &self->_authRef);
     if (err == errAuthorizationSuccess) {
         err = AuthorizationMakeExternalForm(self->_authRef, &extForm);
@@ -201,16 +191,11 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
         self.authorization = [[NSData alloc] initWithBytes:&extForm length:sizeof(extForm)];
     }
     assert(err == errAuthorizationSuccess);
-    
-    // If we successfully connected to Authorization Services, add definitions for our default
-    // rights (unless they're already in the database).
-    
     if (self->_authRef) {
         [Common setupAuthorizationRights:self->_authRef];
     }
     
-
-    // back to my code
+    // app logic
     NSOperatingSystemVersion osV = [NSProcessInfo processInfo].operatingSystemVersion;
     if (osV.minorVersion < 12 || (osV.minorVersion == 12 && osV.patchVersion < 1)) {
         [self alertForIncompatibility];
@@ -259,18 +244,9 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
 
     } else {
         [self toggleOnHighSierra:nil];
-//        NSDictionary *error = [NSDictionary new];
-//        NSString *script =  @"do shell script \"launchctl load /System/Library/LaunchDaemons/com.apple.touchbarserver.plist;killall Dock\" with administrator privileges";
-//        NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
-//        if ([appleScript executeAndReturnError:&error]) {
-//            NSLog(@"success!");
         touchBarDisabled = NO;
         toggler.title = NSLocalizedString(@"DISABLE_TOUCH_BAR", nil);
         [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:@"touchBarDisabled"];
-//
-//        } else {
-//            NSLog(@"failure!");
-//        }
     }
 }
 
@@ -298,19 +274,11 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
         toggler.title = enable;
         [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"touchBarDisabled"];
     } else {
-//        NSDictionary *error = [NSDictionary new];
-//        NSString *script =  @"do shell script \"killall TouchBarServer;sudo launchctl unload /System/Library/LaunchDaemons/com.apple.touchbarserver.plist\" with administrator privileges";
-//        NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
-//        if ([appleScript executeAndReturnError:&error]) {
-//            NSLog(@"success!");
         [self toggleOffHighSierra:nil];
-            touchBarDisabled = YES;
-            NSString *enable = NSLocalizedString(@"ENABLE_TOUCH_BAR", nil);
-            toggler.title = enable;
-            [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"touchBarDisabled"];
-//        } else {
-//            NSLog(@"failure!");
-//        }
+        touchBarDisabled = YES;
+        NSString *enable = NSLocalizedString(@"ENABLE_TOUCH_BAR", nil);
+        toggler.title = enable;
+        [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"touchBarDisabled"];
     }
 }
 
@@ -576,10 +544,7 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
     }
 }
 
-- (IBAction)toggleOnHighSierra:(id)sender
-// Called when the user clicks the Get Version button.  This is the simplest form of
-// NSXPCConnection request because it doesn't require any authorization.
-{
+- (void)toggleOnHighSierra:(id)sender {
 #pragma unused(sender)
     [self connectAndExecuteCommandBlock:^(NSError * connectError) {
         if (connectError != nil) {
@@ -594,10 +559,7 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
     }];
 }
 
-- (IBAction)toggleOffHighSierra:(id)sender
-// Called when the user clicks the Read License button.  This is an example of an
-// authorized command that, by default, can be done by anyone.
-{
+- (void)toggleOffHighSierra:(id)sender {
 #pragma unused(sender)
     [self connectAndExecuteCommandBlock:^(NSError * connectError) {
         if (connectError != nil) {
@@ -616,62 +578,5 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
     }];
 }
 
-- (IBAction)writeLicenseAction:(id)sender
-// Called when the user clicks the Write License button.  This is an example of an
-// authorized command that, by default, can only be done by administrators.
-{
-#pragma unused(sender)
-    NSString *  licenseKey;
-    
-    // Generate a new random license key so that we can see things change.
-    
-    licenseKey = [[NSUUID UUID] UUIDString];
-    
-    [self connectAndExecuteCommandBlock:^(NSError * connectError) {
-        if (connectError != nil) {
-            [self logError:connectError];
-        } else {
-            [[self.helperToolConnection remoteObjectProxyWithErrorHandler:^(NSError * proxyError) {
-                [self logError:proxyError];
-            }] writeLicenseKey:licenseKey authorization:self.authorization withReply:^(NSError *error) {
-                if (error != nil) {
-                    [self logError:error];
-                } else {
-                    [self logWithFormat:@"success\n"];
-                }
-            }];
-        }
-    }];
-}
-
-- (IBAction)bindAction:(id)sender
-// Called when the user clicks the Bind button.  This is an example of an authorized
-// command that returns file descriptors.
-{
-#pragma unused(sender)
-    [self connectAndExecuteCommandBlock:^(NSError * connectError) {
-        if (connectError != nil) {
-            [self logError:connectError];
-        } else {
-            [[self.helperToolConnection remoteObjectProxyWithErrorHandler:^(NSError * proxyError) {
-                [self logError:proxyError];
-            }] bindToLowNumberPortAuthorization:self.authorization withReply:^(NSError *error, NSFileHandle *ipv4Handle, NSFileHandle *ipv6Handle) {
-                if (error != nil) {
-                    [self logError:error];
-                } else {
-                    // Each of these NSFileHandles has the close-on-dealloc flag set.  If we wanted to hold
-                    // on to the underlying descriptor for a long time, we need to call <x-man-page://dup2>
-                    // on that descriptor to get our our descriptor that persists beyond the lifetime of
-                    // the NSFileHandle.  In this example app, however, we just print the descriptors, which
-                    // we can do without any complications.
-                    [self logWithFormat:@"IPv4 = %d, IPv6 = %u\n",
-                     [ipv4Handle fileDescriptor],
-                     [ipv6Handle fileDescriptor]
-                     ];
-                }
-            }];
-        }
-    }];
-}
 
 @end
