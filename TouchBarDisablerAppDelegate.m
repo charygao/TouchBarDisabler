@@ -11,7 +11,6 @@
 #import <AVKit/AVKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <ServiceManagement/ServiceManagement.h>
-#import "STPrivilegedTask.h"
 
 @import CoreMedia;
 

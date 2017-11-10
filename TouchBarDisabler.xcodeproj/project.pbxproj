@@ -19,7 +19,6 @@
 		56105AFE1EA9AF3100FF1F59 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56105AFD1EA9AF3100FF1F59 /* AudioToolbox.framework */; };
 		563EB6651EADB62C00858299 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 563EB6641EADB62C00858299 /* MainMenu.xib */; };
 		563EB6671EADB66E00858299 /* tb_disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 563EB6661EADB66E00858299 /* tb_disabled.png */; };
-		56771DDF1F5F238900027ED5 /* STPrivilegedTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 56771DDD1F5F238900027ED5 /* STPrivilegedTask.m */; };
 		56771E071F5F276900027ED5 /* helper in Resources */ = {isa = PBXBuildFile; fileRef = 56771E061F5F276900027ED5 /* helper */; };
 		56804CB71EAD9DA6008D76AB /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 56804CB61EAD9DA6008D76AB /* Icon.icns */; };
 		568DD8221F2055C200AFA965 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 568DD8211F2055C200AFA965 /* ServiceManagement.framework */; };
@@ -74,8 +73,6 @@
 		563EB6661EADB66E00858299 /* tb_disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tb_disabled.png; sourceTree = "<group>"; };
 		563EB6681EADB7D100858299 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		563EB6691EADB80900858299 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		56771DDD1F5F238900027ED5 /* STPrivilegedTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STPrivilegedTask.m; sourceTree = "<group>"; };
-		56771DDE1F5F238900027ED5 /* STPrivilegedTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STPrivilegedTask.h; sourceTree = "<group>"; };
 		56771E061F5F276900027ED5 /* helper */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = helper; sourceTree = "<group>"; };
 		56804CB61EAD9DA6008D76AB /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
 		568DD8211F2055C200AFA965 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
@@ -129,8 +126,6 @@
 				55CD8D55181C2F9E003799D0 /* DDHotKey */,
 				256AC3D80F4B6AC300CF3369 /* TouchBarDisablerAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* TouchBarDisablerAppDelegate.m */,
-				56771DDD1F5F238900027ED5 /* STPrivilegedTask.m */,
-				56771DDE1F5F238900027ED5 /* STPrivilegedTask.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -375,7 +370,6 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				55CD8D52181C222C003799D0 /* DDHotKeyCenter.m in Sources */,
-				56771DDF1F5F238900027ED5 /* STPrivilegedTask.m in Sources */,
 				55CD8D54181C222C003799D0 /* DDHotKeyUtilities.m in Sources */,
 				256AC3DA0F4B6AC300CF3369 /* TouchBarDisablerAppDelegate.m in Sources */,
 				55CD8D53181C222C003799D0 /* DDHotKeyTextField.m in Sources */,
