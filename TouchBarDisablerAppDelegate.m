@@ -76,6 +76,10 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     NSString *strOutput = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:[notification object]];
     if ([strOutput containsString:@"disabled"]) {
+        NSOperatingSystemVersion osV = [NSProcessInfo processInfo].operatingSystemVersion;
+        if (osV.minorVersion >= 13) {
+            [self installAction:nil];
+        }
         [self setupAppWhenSIPIsOff];
     } else {
         [self showOnboardHelp];
@@ -137,8 +141,8 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     toggler = [[NSMenuItem alloc] initWithTitle:disable action:@selector(toggleTouchBar:) keyEquivalent:@""];
     showHelp = [[NSMenuItem alloc] initWithTitle:shortcut action:@selector(displayHUD:) keyEquivalent:@""];
     installHelper = [[NSMenuItem alloc] initWithTitle:@"installHelper" action:@selector(installAction:) keyEquivalent:@""];
-    turnOn = [[NSMenuItem alloc] initWithTitle:@"turnOn" action:@selector(getVersionAction:) keyEquivalent:@""];
-    turnOff = [[NSMenuItem alloc] initWithTitle:@"turnOff" action:@selector(readLicenseAction:) keyEquivalent:@""];
+    turnOn = [[NSMenuItem alloc] initWithTitle:@"turnOn" action:@selector(toggleOnHighSierra:) keyEquivalent:@""];
+    turnOff = [[NSMenuItem alloc] initWithTitle:@"turnOff" action:@selector(toggleOffHighSierra:) keyEquivalent:@""];
 
     [menu addItem:toggler];
     [menu addItem:installHelper];
@@ -254,18 +258,19 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
         [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:@"touchBarDisabled"];
 
     } else {
-        NSDictionary *error = [NSDictionary new];
-        NSString *script =  @"do shell script \"launchctl load /System/Library/LaunchDaemons/com.apple.touchbarserver.plist;killall Dock\" with administrator privileges";
-        NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
-        if ([appleScript executeAndReturnError:&error]) {
-            NSLog(@"success!");
-            touchBarDisabled = NO;
-            toggler.title = NSLocalizedString(@"DISABLE_TOUCH_BAR", nil);
-            [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:@"touchBarDisabled"];
-
-        } else {
-            NSLog(@"failure!");
-        }
+        [self toggleOnHighSierra:nil];
+//        NSDictionary *error = [NSDictionary new];
+//        NSString *script =  @"do shell script \"launchctl load /System/Library/LaunchDaemons/com.apple.touchbarserver.plist;killall Dock\" with administrator privileges";
+//        NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
+//        if ([appleScript executeAndReturnError:&error]) {
+//            NSLog(@"success!");
+        touchBarDisabled = NO;
+        toggler.title = NSLocalizedString(@"DISABLE_TOUCH_BAR", nil);
+        [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:@"touchBarDisabled"];
+//
+//        } else {
+//            NSLog(@"failure!");
+//        }
     }
 }
 
@@ -293,18 +298,19 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
         toggler.title = enable;
         [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"touchBarDisabled"];
     } else {
-        NSDictionary *error = [NSDictionary new];
-        NSString *script =  @"do shell script \"killall TouchBarServer;sudo launchctl unload /System/Library/LaunchDaemons/com.apple.touchbarserver.plist\" with administrator privileges";
-        NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
-        if ([appleScript executeAndReturnError:&error]) {
-            NSLog(@"success!");
+//        NSDictionary *error = [NSDictionary new];
+//        NSString *script =  @"do shell script \"killall TouchBarServer;sudo launchctl unload /System/Library/LaunchDaemons/com.apple.touchbarserver.plist\" with administrator privileges";
+//        NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
+//        if ([appleScript executeAndReturnError:&error]) {
+//            NSLog(@"success!");
+        [self toggleOffHighSierra:nil];
             touchBarDisabled = YES;
             NSString *enable = NSLocalizedString(@"ENABLE_TOUCH_BAR", nil);
             toggler.title = enable;
             [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"touchBarDisabled"];
-        } else {
-            NSLog(@"failure!");
-        }
+//        } else {
+//            NSLog(@"failure!");
+//        }
     }
 }
 
@@ -558,10 +564,19 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
     } else {
         [self logError:(__bridge NSError *) error];
         CFRelease(error);
+        [self installAction:nil];
+//        NSAlert *alert = [[NSAlert alloc] init];
+//        [alert setMessageText:NSLocalizedString(@"TouchBarDisabler requires your authentication.", nil)];
+//        [alert setInformativeText:NSLocalizedString(@"Under macOS High Sierra, TouchBarDisabler requires your authentication to function properly. \n\nIf you would like to try to authenticate again, opeen TouchBarDisabler again and enter your user credentials.", nil)];
+//        [alert addButtonWithTitle:NSLocalizedString(@"Quit", nil)];
+//        int response = [alert runModal];
+//
+//        if (response != NSAlertSecondButtonReturn) {
+//        }
     }
 }
 
-- (IBAction)getVersionAction:(id)sender
+- (IBAction)toggleOnHighSierra:(id)sender
 // Called when the user clicks the Get Version button.  This is the simplest form of
 // NSXPCConnection request because it doesn't require any authorization.
 {
@@ -579,7 +594,7 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
     }];
 }
 
-- (IBAction)readLicenseAction:(id)sender
+- (IBAction)toggleOffHighSierra:(id)sender
 // Called when the user clicks the Read License button.  This is an example of an
 // authorized command that, by default, can be done by anyone.
 {
