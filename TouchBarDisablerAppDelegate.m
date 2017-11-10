@@ -201,26 +201,13 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
         };
         [task launch];
     } else {
-        // Create task
-        STPrivilegedTask *privilegedTask = [[STPrivilegedTask alloc] init];
-        [privilegedTask setLaunchPath:@"/bin/bash"];
-        NSArray *args = [NSArray arrayWithObjects: @"-c", @"sudo launchctl load /System/Library/LaunchDaemons/com.apple.touchbarserver.plist;killall Dock", nil];
-        [privilegedTask setArguments:args];
-        
-        // Setting working directory is optional, defaults to /
-        // NSString *path = [[NSBundle mainBundle] resourcePath];
-        // [privilegedTask setCurrentDirectoryPath:path];
-        
-        // Launch it, user is prompted for password
-        OSStatus err = [privilegedTask launch];
-        if (err != errAuthorizationSuccess) {
-            if (err == errAuthorizationCanceled) {
-                NSLog(@"User cancelled");
-            } else {
-                NSLog(@"Something went wrong");
-            }
+        NSDictionary *error = [NSDictionary new];
+        NSString *script =  @"do shell script \"launchctl load /System/Library/LaunchDaemons/com.apple.touchbarserver.plist;killall Dock\" with administrator privileges";
+        NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
+        if ([appleScript executeAndReturnError:&error]) {
+            NSLog(@"success!");
         } else {
-            NSLog(@"Task successfully launched");
+            NSLog(@"failure!");
         }
     }
     touchBarDisabled = NO;
@@ -247,26 +234,13 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
         }
         [task launch];
     } else {
-        // Create task
-        STPrivilegedTask *privilegedTask = [[STPrivilegedTask alloc] init];
-        [privilegedTask setLaunchPath:@"/bin/bash"];
-        NSArray *args = [NSArray arrayWithObjects: @"-c", @"sudo killall TouchBarServer;sudo launchctl unload /System/Library/LaunchDaemons/com.apple.touchbarserver.plist", nil];
-        [privilegedTask setArguments:args];
-        
-        // Setting working directory is optional, defaults to /
-        // NSString *path = [[NSBundle mainBundle] resourcePath];
-        // [privilegedTask setCurrentDirectoryPath:path];
-        
-        // Launch it, user is prompted for password
-        OSStatus err = [privilegedTask launch];
-        if (err != errAuthorizationSuccess) {
-            if (err == errAuthorizationCanceled) {
-                NSLog(@"User cancelled");
-            } else {
-                NSLog(@"Something went wrong");
-            }
+        NSDictionary *error = [NSDictionary new];
+        NSString *script =  @"do shell script \"killall TouchBarServer;sudo launchctl unload /System/Library/LaunchDaemons/com.apple.touchbarserver.plist\" with administrator privileges";
+        NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
+        if ([appleScript executeAndReturnError:&error]) {
+            NSLog(@"success!");
         } else {
-            NSLog(@"Task successfully launched");
+            NSLog(@"failure!");
         }
     }
     touchBarDisabled = YES;
