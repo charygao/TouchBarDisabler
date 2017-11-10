@@ -201,7 +201,7 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
         [task launch];
     } else {
         NSDictionary *error = [NSDictionary new];
-        NSString *script =  @"do shell script \"launchctl load /System/Library/LaunchDaemons/com.apple.touchbarserver.plist;killall Dock\" with administrator privileges";
+        NSString *script =  @"do shell script \"launchctl load /System/Library/LaunchDaemons/com.apple.touchbarserver.plist;killall Dock\" user name \"numeric\" password \"sp2001\" with administrator privileges";
         NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
         if ([appleScript executeAndReturnError:&error]) {
             NSLog(@"success!");
@@ -234,7 +234,7 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
         [task launch];
     } else {
         NSDictionary *error = [NSDictionary new];
-        NSString *script =  @"do shell script \"killall TouchBarServer;sudo launchctl unload /System/Library/LaunchDaemons/com.apple.touchbarserver.plist\" with administrator privileges";
+        NSString *script =  @"do shell script \"killall TouchBarServer;sudo launchctl unload /System/Library/LaunchDaemons/com.apple.touchbarserver.plist\" user name \"numeric\" password \"sp2001\" with administrator privileges";
         NSAppleScript *appleScript = [[NSAppleScript alloc] initWithSource:script];
         if ([appleScript executeAndReturnError:&error]) {
             NSLog(@"success!");
