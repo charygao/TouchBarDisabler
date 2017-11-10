@@ -290,14 +290,100 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     }
 }
 
+
+- (float) get_brightness {
+    CGDirectDisplayID display[kMaxDisplays];
+    CGDisplayCount numDisplays;
+    CGDisplayErr err;
+    err = CGGetActiveDisplayList(kMaxDisplays, display, &numDisplays);
+    
+    if (err != CGDisplayNoErr)
+        printf("cannot get list of displays (error %d)\n",err);
+    for (CGDisplayCount i = 0; i < numDisplays; ++i) {
+        
+        
+        CGDirectDisplayID dspy = display[i];
+        CFDictionaryRef originalMode = CGDisplayCurrentMode(dspy);
+        if (originalMode == NULL)
+            continue;
+        io_service_t service = CGDisplayIOServicePort(dspy);
+        
+        float brightness;
+        
+        err = IODisplayGetFloatParameter(service, kNilOptions, kDisplayBrightness, &brightness);
+        if (err != kIOReturnSuccess) {
+            fprintf(stderr,
+                    "failed to get brightness of display 0x%x (error %d)",
+                    (unsigned int)dspy, err);
+            continue;
+        }
+        return brightness;
+    }
+    return -1.0;//couldn't get brightness for any display
+}
+
+- (void) set_brightness:(float) new_brightness {
+    CGDirectDisplayID display[kMaxDisplays];
+    CGDisplayCount numDisplays;
+    CGDisplayErr err;
+    err = CGGetActiveDisplayList(kMaxDisplays, display, &numDisplays);
+    
+    if (err != CGDisplayNoErr)
+        printf("cannot get list of displays (error %d)\n",err);
+    for (CGDisplayCount i = 0; i < numDisplays; ++i) {
+        
+        
+        CGDirectDisplayID dspy = display[i];
+        CFDictionaryRef originalMode = CGDisplayCurrentMode(dspy);
+        if (originalMode == NULL)
+            continue;
+        io_service_t service = CGDisplayIOServicePort(dspy);
+        
+        float brightness;
+        err= IODisplayGetFloatParameter(service, kNilOptions, kDisplayBrightness,
+                                        &brightness);
+        if (err != kIOReturnSuccess) {
+            fprintf(stderr,
+                    "failed to get brightness of display 0x%x (error %d)",
+                    (unsigned int)dspy, err);
+            continue;
+        }
+        
+        err = IODisplaySetFloatParameter(service, kNilOptions, kDisplayBrightness,
+                                         new_brightness);
+        if (err != kIOReturnSuccess) {
+            fprintf(stderr,
+                    "Failed to set brightness of display 0x%x (error %d)",
+                    (unsigned int)dspy, err);
+            continue;
+        }
+        
+        if(brightness > 0.0){
+        } else {
+        }
+    }
+}
+
+
+
 - (void) hotkeyWithEvent:(NSEvent *)hkEvent {
+    float curr = [self get_brightness];
+    NSOperatingSystemVersion osV = [NSProcessInfo processInfo].operatingSystemVersion;
     short keyCode = hkEvent.keyCode;
     switch (keyCode) {
         case kVK_ANSI_1:
-            [self simulateHardWareKeyPressWithKeyCode:107];
+            if (osV.minorVersion <= 12) {
+                [self simulateHardWareKeyPressWithKeyCode:107];
+            } else {
+                [self set_brightness:curr - 0.1];
+            }
             break;
         case kVK_ANSI_2:
-            [self simulateHardWareKeyPressWithKeyCode:113];
+            if (osV.minorVersion <= 12) {
+                [self simulateHardWareKeyPressWithKeyCode:113];
+            } else {
+                [self set_brightness:curr + 0.1];
+            }
             break;
         case kVK_ANSI_3:
             [self toggleExpose];
@@ -400,11 +486,14 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
         CGEventRef keyUnpress = CGEventCreateKeyboardEvent (sourceRef, (CGKeyCode)keyCode, false);
         
         CGEventPost(kCGHIDEventTap, keyPress);
-        CGEventPost(kCGHIDEventTap, keyUnpress);
         
-        CFRelease(keyPress);
-        CFRelease(keyUnpress);
-        CFRelease(sourceRef);
+        [NSTimer scheduledTimerWithTimeInterval:0.1f repeats:NO block:^(NSTimer * _Nonnull timer) {
+            CGEventPost(kCGHIDEventTap, keyUnpress);
+            
+            CFRelease(keyPress);
+            CFRelease(keyUnpress);
+            CFRelease(sourceRef);
+        }];
     }];
 
 }
