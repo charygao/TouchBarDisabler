@@ -232,16 +232,13 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey)
             [self.menu removeItem:showHelp];
         };
         [task launch];
-        touchBarDisabled = NO;
-        toggler.title = NSLocalizedString(@"DISABLE_TOUCH_BAR", nil);
-        [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:@"touchBarDisabled"];
-
     } else {
         [self toggleOnHighSierra:nil];
-        touchBarDisabled = NO;
-        toggler.title = NSLocalizedString(@"DISABLE_TOUCH_BAR", nil);
-        [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:@"touchBarDisabled"];
     }
+    [self.menu removeItem:showHelp];
+    touchBarDisabled = NO;
+    toggler.title = NSLocalizedString(@"DISABLE_TOUCH_BAR", nil);
+    [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:@"touchBarDisabled"];
 }
 
 - (void)disableTouchBar {
@@ -269,6 +266,7 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey)
         [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"touchBarDisabled"];
     } else {
         [self toggleOffHighSierra:nil];
+        [self.menu addItem:showHelp];
         touchBarDisabled = YES;
         NSString *enable = NSLocalizedString(@"ENABLE_TOUCH_BAR", nil);
         toggler.title = enable;
@@ -503,11 +501,6 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
 
 #pragma mark -
 #pragma mark - External
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
-{
-#pragma unused(sender)
-    return YES;
-}
 
 - (void)logText:(NSString *)text {
     assert(text != nil);
