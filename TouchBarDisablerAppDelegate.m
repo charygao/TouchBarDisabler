@@ -22,7 +22,7 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey)
 @interface TouchBarDisablerAppDelegate() {
     BOOL hasSeenHelperOnce;
     BOOL touchBarDisabled;
-    NSMenu *menu;
+//    NSMenu *menu;
     NSMenuItem *toggler;
     NSMenuItem *showHelp;
     NSMenuItem *quit;
@@ -42,6 +42,7 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey)
     __weak IBOutlet AVPlayerView *onboardVideo;
     AuthorizationRef    _authRef;
 }
+@property (nonatomic, strong) NSMenu *menu;
 @property (atomic, copy,   readwrite) NSData *                  authorization;
 @property (atomic, strong, readwrite) NSXPCConnection *         helperToolConnection;
 
@@ -134,14 +135,14 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey)
     _statusItem.title = @"T";
     _statusItem.highlightMode = YES;
     
-    menu = [[NSMenu alloc] init];
+    self.menu = [[NSMenu alloc] init];
     NSString *disable = NSLocalizedString(@"DISABLE_TOUCH_BAR", nil);
     NSString *shortcut = NSLocalizedString(@"SHORTCUT_HELP", nil);
     
     toggler = [[NSMenuItem alloc] initWithTitle:disable action:@selector(toggleTouchBar:) keyEquivalent:@""];
     showHelp = [[NSMenuItem alloc] initWithTitle:shortcut action:@selector(displayHUD:) keyEquivalent:@""];
-    [menu addItem:toggler];
-    [menu addItem:installHelper];
+    [self.menu addItem:toggler];
+//    [self.menu addItem:showHelp];
 
     NSNumber *num = [[NSUserDefaults standardUserDefaults] objectForKey:@"touchBarDisabled"];
     NSNumber *helper = [[NSUserDefaults standardUserDefaults] objectForKey:@"hasSeenHelperOnce"];
@@ -158,11 +159,10 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey)
         }
     }
     
-    [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
+    [self.menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
     quit = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"QUIT_TOUCH_BAR_DISABLER", nil) action:@selector(terminate:) keyEquivalent:@""];
-    
-    [menu addItem:quit];
-    _statusItem.menu = menu;
+    [self.menu addItem:quit];
+    _statusItem.menu = self.menu;
     
     if (!SMLoginItemSetEnabled((__bridge CFStringRef)@"com.dim.TouchBarDisabler-Helper", YES)) {
         NSLog(@"Login Item Was Not Successful");
@@ -229,7 +229,7 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey)
         [task setLaunchPath:@"/bin/bash"];
         [task setArguments:@[ @"-c", @"defaults delete com.apple.touchbar.agent PresentationModeGlobal;defaults write com.apple.touchbar.agent PresentationModeFnModes '<dict><key>app</key><string>fullControlStrip</string><key>appWithControlStrip</key><string>fullControlStrip</string><key>fullControlStrip</key><string>app</string></dict>';launchctl load /System/Library/LaunchAgents/com.apple.controlstrip.plist;launchctl load /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;launchctl unload /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;launchctl load /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;pkill \"Touch Bar agent\";killall Dock"]];
         task.terminationHandler = ^(NSTask *task){
-            [menu removeItem:showHelp];
+            [self.menu removeItem:showHelp];
         };
         [task launch];
         touchBarDisabled = NO;
@@ -254,7 +254,7 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey)
         [task setArguments:@[ @"-c", @"defaults write com.apple.touchbar.agent PresentationModeGlobal -string fullControlStrip;launchctl unload /System/Library/LaunchAgents/com.apple.controlstrip.plist;killall ControlStrip;launchctl unload /System/Library/LaunchAgents/com.apple.touchbar.agent.plist;launchctl unload /System/Library/LaunchDaemons/com.apple.touchbar.user-device.plist;pkill \"Touch Bar agent\""]];
         task.terminationHandler = ^(NSTask *task){
             [emptyWindow setIsVisible:NO];
-            [menu addItem:showHelp];
+            [self.menu addItem:showHelp];
         };
         if (hasSeenHelperOnce) {
             [emptyWindow setIsVisible:YES];
@@ -583,8 +583,6 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
 // Called when the user clicks the Install button.  This uses SMJobBless to install
 // the helper tool.
 {
-#pragma unused(sender)
-    
     Boolean             success;
     CFErrorRef          error;
     
