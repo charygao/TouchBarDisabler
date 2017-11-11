@@ -579,10 +579,7 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
 
 #pragma mark * IB Actions
 
-- (IBAction)installAction:(id)sender
-// Called when the user clicks the Install button.  This uses SMJobBless to install
-// the helper tool.
-{
+- (void)installHelper {
     Boolean             success;
     CFErrorRef          error;
     
@@ -599,15 +596,44 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
         [self logError:(__bridge NSError *) error];
         CFRelease(error);
         [self installAction:nil];
-//        NSAlert *alert = [[NSAlert alloc] init];
-//        [alert setMessageText:NSLocalizedString(@"TouchBarDisabler requires your authentication.", nil)];
-//        [alert setInformativeText:NSLocalizedString(@"Under macOS High Sierra, TouchBarDisabler requires your authentication to function properly. \n\nIf you would like to try to authenticate again, opeen TouchBarDisabler again and enter your user credentials.", nil)];
-//        [alert addButtonWithTitle:NSLocalizedString(@"Quit", nil)];
-//        int response = [alert runModal];
-//
-//        if (response != NSAlertSecondButtonReturn) {
-//        }
+        //        NSAlert *alert = [[NSAlert alloc] init];
+        //        [alert setMessageText:NSLocalizedString(@"TouchBarDisabler requires your authentication.", nil)];
+        //        [alert setInformativeText:NSLocalizedString(@"Under macOS High Sierra, TouchBarDisabler requires your authentication to function properly. \n\nIf you would like to try to authenticate again, opeen TouchBarDisabler again and enter your user credentials.", nil)];
+        //        [alert addButtonWithTitle:NSLocalizedString(@"Quit", nil)];
+        //        int response = [alert runModal];
+        //
+        //        if (response != NSAlertSecondButtonReturn) {
+        //        }
     }
+}
+
+- (IBAction)installAction:(id)sender {
+    [self connectAndExecuteCommandBlock:^(NSError * connectError) {
+        if (connectError != nil) {
+            [self logError:connectError];
+            [self installHelper];
+        } else {
+            [[self.helperToolConnection remoteObjectProxyWithErrorHandler:^(NSError * proxyError) {
+                [self logError:proxyError];
+                [self installHelper];
+            }] bindToLowNumberPortAuthorization:self.authorization withReply:^(NSError *error, NSFileHandle *ipv4Handle, NSFileHandle *ipv6Handle) {
+                if (error != nil) {
+                    [self logError:error];
+                    [self installHelper];
+                } else {
+                    // Each of these NSFileHandles has the close-on-dealloc flag set.  If we wanted to hold
+                    // on to the underlying descriptor for a long time, we need to call <x-man-page://dup2>
+                    // on that descriptor to get our our descriptor that persists beyond the lifetime of
+                    // the NSFileHandle.  In this example app, however, we just print the descriptors, which
+                    // we can do without any complications.
+                    [self logWithFormat:@"IPv4 = %d, IPv6 = %u\n",
+                     [ipv4Handle fileDescriptor],
+                     [ipv6Handle fileDescriptor]
+                     ];
+                }
+            }];
+        }
+    }];
 }
 
 - (void)toggleOnHighSierra:(id)sender {
