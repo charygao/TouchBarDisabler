@@ -17,7 +17,8 @@
 @import CoreMedia;
 
 const int kMaxDisplays = 16;
-const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
+const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey)
+;
 @interface TouchBarDisablerAppDelegate() {
     BOOL hasSeenHelperOnce;
     BOOL touchBarDisabled;
@@ -123,7 +124,6 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     [p seekToTime:kCMTimeZero];
 }
 
-
 - (void)setupAppWhenSIPIsOff {
     [hintLabel setStringValue:NSLocalizedString(@"HINT_LABEL", nil)];
     [hintContent setStringValue:NSLocalizedString(@"HINT_CONTENT", nil)];
@@ -140,14 +140,8 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     
     toggler = [[NSMenuItem alloc] initWithTitle:disable action:@selector(toggleTouchBar:) keyEquivalent:@""];
     showHelp = [[NSMenuItem alloc] initWithTitle:shortcut action:@selector(displayHUD:) keyEquivalent:@""];
-//    installHelper = [[NSMenuItem alloc] initWithTitle:@"installHelper" action:@selector(installAction:) keyEquivalent:@""];
-//    turnOn = [[NSMenuItem alloc] initWithTitle:@"turnOn" action:@selector(toggleOnHighSierra:) keyEquivalent:@""];
-//    turnOff = [[NSMenuItem alloc] initWithTitle:@"turnOff" action:@selector(toggleOffHighSierra:) keyEquivalent:@""];
-
     [menu addItem:toggler];
-//    [menu addItem:installHelper];
-//    [menu addItem:turnOn];
-//    [menu addItem:turnOff];
+    [menu addItem:installHelper];
 
     NSNumber *num = [[NSUserDefaults standardUserDefaults] objectForKey:@"touchBarDisabled"];
     NSNumber *helper = [[NSUserDefaults standardUserDefaults] objectForKey:@"hasSeenHelperOnce"];
@@ -373,16 +367,16 @@ const CFStringRef kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     switch (keyCode) {
         case kVK_ANSI_1:
             if (osV.minorVersion <= 12) {
-                [self simulateHardWareKeyPressWithKeyCode:107];
+                [self simulateHardWareKeyPressWithKeyCode:NX_KEYTYPE_BRIGHTNESS_DOWN];
             } else {
-                [self set_brightness:curr - 0.1];
+                [self set_brightness:curr - 0.05];
             }
             break;
         case kVK_ANSI_2:
             if (osV.minorVersion <= 12) {
-                [self simulateHardWareKeyPressWithKeyCode:113];
+                [self simulateHardWareKeyPressWithKeyCode:NX_KEYTYPE_BRIGHTNESS_UP];
             } else {
-                [self set_brightness:curr + 0.1];
+                [self set_brightness:curr + 0.05];
             }
             break;
         case kVK_ANSI_3:
@@ -484,16 +478,11 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
     [NSTimer scheduledTimerWithTimeInterval:0.05f repeats:NO block:^(NSTimer * _Nonnull timer) {
         CGEventRef keyPress = CGEventCreateKeyboardEvent (sourceRef, (CGKeyCode)keyCode, true);
         CGEventRef keyUnpress = CGEventCreateKeyboardEvent (sourceRef, (CGKeyCode)keyCode, false);
-        
         CGEventPost(kCGHIDEventTap, keyPress);
-        
-        [NSTimer scheduledTimerWithTimeInterval:0.1f repeats:NO block:^(NSTimer * _Nonnull timer) {
-            CGEventPost(kCGHIDEventTap, keyUnpress);
-            
-            CFRelease(keyPress);
-            CFRelease(keyUnpress);
-            CFRelease(sourceRef);
-        }];
+        CGEventPost(kCGHIDEventTap, keyUnpress);
+        CFRelease(keyPress);
+        CFRelease(keyUnpress);
+        CFRelease(sourceRef);
     }];
 
 }
@@ -520,20 +509,14 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
     return YES;
 }
 
-- (void)logText:(NSString *)text
-// Logs the specified text to the text view.
-{
-    // any thread
+- (void)logText:(NSString *)text {
     assert(text != nil);
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        NSLog(text);
-        //        [[self.textView textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:text]];
+        NSLog(@"%@", text);
     }];
 }
 
-- (void)logWithFormat:(NSString *)format, ...
-// Logs the formatted text to the text view.
-{
+- (void)logWithFormat:(NSString *)format, ... {
     va_list ap;
     
     // any thread
@@ -544,17 +527,13 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
     va_end(ap);
 }
 
-- (void)logError:(NSError *)error
-// Logs the error to the text view.
-{
+- (void)logError:(NSError *)error {
     // any thread
     assert(error != nil);
     [self logWithFormat:@"error %@ / %d\n", [error domain], (int) [error code]];
 }
 
-- (void)connectToHelperTool
-// Ensures that we're connected to our helper tool.
-{
+- (void)connectToHelperTool {
     assert([NSThread isMainThread]);
     if (self.helperToolConnection == nil) {
         self.helperToolConnection = [[NSXPCConnection alloc] initWithMachServiceName:kHelperToolMachServiceName options:NSXPCConnectionPrivileged];

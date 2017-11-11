@@ -172,6 +172,7 @@
 				55CD8D55181C2F9E003799D0 /* DDHotKey */,
 				256AC3D80F4B6AC300CF3369 /* TouchBarDisablerAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* TouchBarDisablerAppDelegate.m */,
+				55CD8D51181C222C003799D0 /* DDHotKeyUtilities.m */,
 				3C8A4B3B1FB6648F005474BC /* Common.h */,
 				3C8A4B3A1FB6648F005474BC /* Common.m */,
 			);
@@ -282,7 +283,6 @@
 				55CD8D4E181C222B003799D0 /* DDHotKeyTextField.h */,
 				55CD8D4F181C222C003799D0 /* DDHotKeyTextField.m */,
 				55CD8D50181C222C003799D0 /* DDHotKeyUtilities.h */,
-				55CD8D51181C222C003799D0 /* DDHotKeyUtilities.m */,
 			);
 			path = DDHotKey;
 			sourceTree = "<group>";
