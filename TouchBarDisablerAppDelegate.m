@@ -601,32 +601,11 @@ static void HIDPostAuxKey( const UInt8 auxKeyCode )
 }
 
 - (IBAction)installAction:(id)sender {
-    [self connectAndExecuteCommandBlock:^(NSError * connectError) {
-        if (connectError != nil) {
-            [self logError:connectError];
-            [self installHelper];
-        } else {
-            [[self.helperToolConnection remoteObjectProxyWithErrorHandler:^(NSError * proxyError) {
-                [self logError:proxyError];
-                [self installHelper];
-            }] bindToLowNumberPortAuthorization:self.authorization withReply:^(NSError *error, NSFileHandle *ipv4Handle, NSFileHandle *ipv6Handle) {
-                if (error != nil) {
-                    [self logError:error];
-                    [self installHelper];
-                } else {
-                    // Each of these NSFileHandles has the close-on-dealloc flag set.  If we wanted to hold
-                    // on to the underlying descriptor for a long time, we need to call <x-man-page://dup2>
-                    // on that descriptor to get our our descriptor that persists beyond the lifetime of
-                    // the NSFileHandle.  In this example app, however, we just print the descriptors, which
-                    // we can do without any complications.
-                    [self logWithFormat:@"IPv4 = %d, IPv6 = %u\n",
-                     [ipv4Handle fileDescriptor],
-                     [ipv6Handle fileDescriptor]
-                     ];
-                }
-            }];
-        }
-    }];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/LaunchDaemons/com.example.apple-samplecode.EBAS.HelperTool.plist"]) {
+        NSLog(@"already installed helper");
+    } else {
+        [self installHelper];
+    }
 }
 
 - (void)toggleOnHighSierra:(id)sender {
