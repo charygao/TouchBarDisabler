@@ -42,6 +42,16 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		3C8A4B5B1FB67FD2005474BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3C8A4B401FB66519005474BC;
+			remoteInfo = HelperTool;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		3C8A4B3F1FB66519005474BC /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -360,6 +370,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				3C8A4B5C1FB67FD2005474BC /* PBXTargetDependency */,
 			);
 			name = TouchBarDisabler;
 			productInstallPath = "$(HOME)/Applications";
@@ -475,6 +486,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3C8A4B5C1FB67FD2005474BC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3C8A4B401FB66519005474BC /* HelperTool */;
+			targetProxy = 3C8A4B5B1FB67FD2005474BC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		56B06FE91F206C3E006CCB31 /* Main.storyboard */ = {
