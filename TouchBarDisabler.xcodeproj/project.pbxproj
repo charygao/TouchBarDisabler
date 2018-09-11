@@ -10,7 +10,6 @@
 		256AC3DA0F4B6AC300CF3369 /* TouchBarDisablerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 256AC3D90F4B6AC300CF3369 /* TouchBarDisablerAppDelegate.m */; };
 		3C8A4B3C1FB6648F005474BC /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A4B3A1FB6648F005474BC /* Common.m */; };
 		3C8A4B4D1FB66525005474BC /* HelperTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A4B481FB66524005474BC /* HelperTool.m */; };
-		3C8A4B4E1FB66525005474BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A4B4C1FB66525005474BC /* main.m */; };
 		3C8A4B4F1FB6652F005474BC /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A4B3A1FB6648F005474BC /* Common.m */; };
 		3C8A4B531FB666B7005474BC /* com.example.apple-samplecode.EBAS.HelperTool in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C8A4B411FB66519005474BC /* com.example.apple-samplecode.EBAS.HelperTool */; };
 		3C8A4B571FB6686F005474BC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C8A4B541FB6685C005474BC /* Foundation.framework */; };
@@ -40,6 +39,7 @@
 		56B8628A1EADADD400F01ED8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 56B8628C1EADADD400F01ED8 /* Localizable.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		8E7D824521479A200080C029 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D824421479A200080C029 /* main.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,7 +101,6 @@
 		3C8A4B491FB66524005474BC /* HelperTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelperTool.h; sourceTree = "<group>"; };
 		3C8A4B4A1FB66524005474BC /* HelperTool-Launchd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HelperTool-Launchd.plist"; sourceTree = "<group>"; };
 		3C8A4B4B1FB66525005474BC /* HelperTool-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HelperTool-Info.plist"; sourceTree = "<group>"; };
-		3C8A4B4C1FB66525005474BC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "../../../Downloads/EvenBetterAuthorizationSample-master/HelperTool/main.m"; sourceTree = "<group>"; };
 		3C8A4B541FB6685C005474BC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3C8A4B551FB66862005474BC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		55378E8B1135C0A70038E405 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -138,6 +137,7 @@
 		56B8628F1EADAEE300F01ED8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* TouchBarDisabler-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TouchBarDisabler-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* TouchBarDisabler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TouchBarDisabler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E7D824421479A200080C029 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,9 +276,9 @@
 		3C8A4B421FB66519005474BC /* HelperTool */ = {
 			isa = PBXGroup;
 			children = (
+				8E7D824421479A200080C029 /* main.m */,
 				3C8A4B4B1FB66525005474BC /* HelperTool-Info.plist */,
 				3C8A4B4A1FB66524005474BC /* HelperTool-Launchd.plist */,
-				3C8A4B4C1FB66525005474BC /* main.m */,
 				3C8A4B491FB66524005474BC /* HelperTool.h */,
 				3C8A4B481FB66524005474BC /* HelperTool.m */,
 			);
@@ -457,7 +457,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C8A4B4F1FB6652F005474BC /* Common.m in Sources */,
-				3C8A4B4E1FB66525005474BC /* main.m in Sources */,
+				8E7D824521479A200080C029 /* main.m in Sources */,
 				3C8A4B4D1FB66525005474BC /* HelperTool.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
